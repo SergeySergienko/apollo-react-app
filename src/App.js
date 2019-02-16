@@ -6,10 +6,42 @@ import "./App.css";
 import Post from "./Posts/Post";
 import NewPost from "./Posts/NewPost";
 import Posts from "./Posts/Posts";
+import gql from "graphql-tag";
+
+const defaultState = {
+  isEditMode: false
+};
 
 const client = new ApolloClient({
-  uri: "https://api-euwest.graphcms.com/v1/cjrxo7f6o22ld01gtcjp4w85x/master"
+  uri: "https://api-euwest.graphcms.com/v1/cjrxo7f6o22ld01gtcjp4w85x/master",
+  clientState: {
+    defaults: defaultState,
+    resolvers: {}
+  }
 });
+
+// ------------------------------
+// const POSTS_QUERY = gql`
+//   query allPosts {
+//     posts {
+//       id
+//       title
+//       body
+//     }
+//   }
+// `;
+// const STATE_QUERY = gql`
+//   {
+//     isEditMode @client
+//   }
+// `;
+// client.writeData({ data: { isEditMode: "hello" } });
+// client
+//   .query({
+//     query: STATE_QUERY
+//   })
+//   .then(res => console.log(res));
+// ------------------------------
 
 export default class App extends Component {
   render() {

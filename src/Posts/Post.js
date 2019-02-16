@@ -3,27 +3,31 @@ import { Query } from "react-apollo";
 import gql from "graphql-tag";
 
 import UpdatePost from "./UpdatePost";
+import EditMode from "./EditMode";
 
 export default class Post extends Component {
   render() {
     return (
       <Query query={POST_QUERY} variables={{ id: this.props.match.params.id }}>
         {({ loading, data }) => {
+          const { post, isEditMode } = data;
           return loading ? (
             <h2>Loading...</h2>
           ) : (
             <Fragment>
-              <section>
-                <h2>{data.post.title}</h2>
-                <h4>{data.post.body}</h4>
-                <span>
-                  {new Date(data.post.createdAt).toLocaleTimeString()}
-                </span>
-              </section>
-              <section>
-                <h2>Edit Post</h2>
-                <UpdatePost post={data.post} />
-              </section>
+              <EditMode isEditMode={isEditMode} />
+              {isEditMode ? (
+                <section>
+                  <h2>Edit Post</h2>
+                  <UpdatePost post={post} />
+                </section>
+              ) : (
+                <section>
+                  <h2>{post.title}</h2>
+                  <h4>{post.body}</h4>
+                  <span>{new Date(post.createdAt).toLocaleTimeString()}</span>
+                </section>
+              )}
             </Fragment>
           );
         }}
@@ -40,5 +44,6 @@ const POST_QUERY = gql`
       body
       createdAt
     }
+    isEditMode @client
   }
 `;
